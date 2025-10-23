@@ -19,7 +19,7 @@ public class AstmController : ControllerBase
         if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
 
         var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
-        var protocolClient = (protocolService as BaseProtocol).GetProtocolClient(protocolService);
+        var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
         await protocolService.SendMessageAsync(protocolClient, req.Message, ct);
 
         return Ok(new { status = "sent" });

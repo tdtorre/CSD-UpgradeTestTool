@@ -38,8 +38,6 @@ namespace Services.Protocols
             {
                 throw new InvalidOperationException($"Could not create {protocolType} client. Error: {ex.Message}");
             }
-
-            return null;
         }
 
         public TcpClient GetProtocolClient(IProtocolService protocolService)
@@ -52,7 +50,7 @@ namespace Services.Protocols
             var protocolType = protocolService.GetProtocolType();
             if (clients.ContainsKey(protocolType) == false)
             {
-                var client = (protocolService as BaseProtocol).CreateClient(protocolType).Result;
+                var client = ((BaseProtocol)protocolService).CreateClient(protocolType).Result;
                 if (client != null)
                 {
                     clients.Add(protocolType, client);

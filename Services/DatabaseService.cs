@@ -44,7 +44,7 @@ namespace Services
             }
         }
 
-        public async Task<List<TestMappingDto>> GetTestMappings()
+        public List<TestMappingDto> GetTestMappings()
         {
             var connectionString = _config.GetConnectionString("IrisDb");
             if (string.IsNullOrEmpty(connectionString))
@@ -71,8 +71,7 @@ namespace Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
-                return new List<TestMappingDto>();
+                throw new InvalidOperationException("Could not retrieve test mappings. " + ex.Message);
             }
         }
     }

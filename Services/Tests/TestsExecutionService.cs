@@ -19,7 +19,7 @@ namespace Services.Tests
             testCases.ForEach(async tc =>
             {
                 var protocolService = ProtocolServiceFactory.GetProtocolService(tc.ProtocolType, _configuration);
-                var protocolClient = (protocolService as BaseProtocol).GetProtocolClient(protocolService, clients);
+                var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService, clients);
 
                 // What shall we do with the response?
                 // await protocolService.SendMessageAsync(protocolClient, tc.Message);

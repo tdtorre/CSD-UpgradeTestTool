@@ -13,7 +13,7 @@ namespace Models
             _config = config;
         }
         
-        public async Task<List<T>> GetData(string query)
+        public List<T> GetData(string query)
         {
             var connectionString = _config.GetConnectionString("IrisDb");
             if (string.IsNullOrEmpty(connectionString))

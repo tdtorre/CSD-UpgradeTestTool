@@ -22,7 +22,7 @@ namespace Services.Tests
             {
                 var protocolType = i.GetProtocolType();
                 var protocolService = ProtocolServiceFactory.GetProtocolService(protocolType, _configuration);
-                var protocolClient = (protocolService as BaseProtocol).GetProtocolClient(protocolService, clients);
+                var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService, clients);
 
                 testCases.AddRange(CreateInstrumentTestCases(i.Type, protocolType, i.TestMapping));
 

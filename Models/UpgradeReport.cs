@@ -5,16 +5,20 @@ namespace Models
         public string Afiliate { get; set; }
         public string ProjectName { get; set; }
         public DateTime GeneratedOn { get; set; }
-        public List<string> Summary { get; set; }
+        public List<string>? Summary { get; set; }
+
+        public UpgradeReport(string afiliate, string projectName)
+        {
+            Afiliate = afiliate;
+            ProjectName = projectName;
+            GeneratedOn = DateTime.Now;
+            Summary = [];
+        }
 
         public static UpgradeReport Generate(UpgradeProject project)
         {
-            var report = new UpgradeReport();
-            report.Afiliate = project.Afiliate.Name;
-            report.ProjectName = project.Name;
-            report.GeneratedOn = DateTime.Now;
-            report.Summary = new List<string>();
-
+            var report = new UpgradeReport(project.Afiliate.Name, project.Name);
+            
             project.UpgradeExecutions.ForEach(execution =>
             {
                 report.Summary.Add($"ICA Module Execution on {execution.ExecutionDate}:");
