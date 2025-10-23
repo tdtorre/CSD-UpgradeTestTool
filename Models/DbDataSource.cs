@@ -13,7 +13,7 @@ namespace Models
             _config = config;
         }
         
-        public List<T> GetData(string query)
+        public async Task<List<T>> GetData(string query)
         {
             var connectionString = _config.GetConnectionString("IrisDb");
             if (string.IsNullOrEmpty(connectionString))
@@ -23,7 +23,7 @@ namespace Models
             try
             {
                 irisConnection.Open();
-                var result = irisConnection.Query<T>(query);
+                var result = await irisConnection.QueryAsync<T>(query);
 
                 if (result != null)
                 {

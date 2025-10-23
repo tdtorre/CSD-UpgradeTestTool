@@ -44,7 +44,7 @@ namespace Services
             }
         }
 
-        public List<TestMappingDto> GetTestMappings()
+        public async Task<List<TestMappingDto>> GetTestMappings()
         {
             var connectionString = _config.GetConnectionString("IrisDb");
             if (string.IsNullOrEmpty(connectionString))
@@ -53,7 +53,7 @@ namespace Services
             try
             {
                 irisConnection.Open();
-                var testMappings = irisConnection.Query<TestMappingDto>("SELECT distinct AnalyserSample,AnalyserTest FROM SQLUser.tconTestMapping");
+                var testMappings = await irisConnection.QueryAsync<TestMappingDto>("SELECT distinct AnalyserSample,AnalyserTest FROM SQLUser.tconTestMapping");
 
                 if (testMappings != null)
                 {

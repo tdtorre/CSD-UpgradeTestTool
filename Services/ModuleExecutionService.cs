@@ -26,9 +26,11 @@ namespace Services
             var icaModule = await LoadIcaModule();
             icaModule.TestCases = await _testsCreationService.IcaTestsCreation(icaModule.Instruments);
             icaModule.TestCases = await _testsExecutionService.IcaTestsExecution(icaModule.TestCases);
-            project.UpgradeExecutions.Last().IcaModule = icaModule;
-            project.Report = UpgradeReport.Generate(project);
-            return project.Report;
+            
+            var lastExecution = project.UpgradeExecutions.Last();
+            lastExecution.IcaModule = icaModule;
+            lastExecution.Report = UpgradeReport.Generate(project);
+            return lastExecution.Report;
         }
 
         private async Task<IcaModule> LoadIcaModule()
@@ -58,8 +60,7 @@ namespace Services
                 Description = "This is a sample upgrade project for demonstration purposes.",
                 SourceVersion = new Version(1, 0),
                 TargetVersion = new Version(2, 0),
-                UpgradeExecutions = new List<UpgradeExecution>(),
-                Report = new UpgradeReport()
+                UpgradeExecutions = new List<UpgradeExecution>()
             };
 
             project.UpgradeExecutions.Add(InitalizeUpgradeExecution());
@@ -70,8 +71,7 @@ namespace Services
         {
             var upgradeExecution = new UpgradeExecution()
             {
-                ExecutionDate = DateTime.Now,
-                Report = new UpgradeReport()
+                ExecutionDate = DateTime.Now
             };
 
             return upgradeExecution;

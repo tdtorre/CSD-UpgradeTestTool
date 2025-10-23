@@ -21,9 +21,9 @@ public class DatabaseController : ControllerBase
     }
 
     [HttpGet("test-mapping")]
-    public async Task<IActionResult> GetTestMapping()
+    public IActionResult GetTestMapping()
     {
-        var res = await _databaseService.GetTestMappings();
+        var res = _databaseService.GetTestMappings();
         return Ok(new { result = res });
     }
 }

@@ -6,6 +6,6 @@ namespace Services
     {
         Task<string> ExecuteQueryAsync(string query);
 
-        List<TestMappingDto> GetTestMappings();
+        Task<List<TestMappingDto>> GetTestMappings();
     }
 }
