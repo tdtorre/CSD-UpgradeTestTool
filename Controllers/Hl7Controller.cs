@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Protocols;
 
 [ApiController]
 [Route("api/[controller]")]
 public class Hl7Controller : ControllerBase
 {
-    private readonly IHl7Service _hl7;
 
-    public Hl7Controller(IHl7Service hl7)
+    private readonly IConfiguration _configuration;
+
+    public Hl7Controller(IConfiguration configuration)
     {
-        _hl7 = hl7;
+        _configuration = configuration;
     }
 
     [HttpPost("send")]
@@ -17,7 +19,11 @@ public class Hl7Controller : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(req.Host) || req.Port <= 0) return BadRequest("Host and port are required");
         if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
-        await _hl7.SendMessageAsync(req.Host, req.Port, req.Message, ct);
+        
+        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+        var protocolClient = (protocolService as BaseProtocol).GetProtocolClient(protocolService);
+        await protocolService.SendMessageAsync(protocolClient, req.Message, ct);
+        
         return Ok(new { status = "sent" });
     }
 }

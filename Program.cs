@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Services;
+using Services.Protocols;
+using Services.Tests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +23,11 @@ builder.Services.AddSwaggerGen(c =>
 
 // DI registrations
 builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
-builder.Services.AddSingleton<IHl7Service, MllpHl7Service>();
-builder.Services.AddSingleton<IAstmService, AstmService>();
+builder.Services.AddSingleton<IProtocolService, Hl7Service>();
+builder.Services.AddSingleton<IProtocolService, AstmService>();
+builder.Services.AddSingleton<IModuleExecutionService, ModuleExecutionService>();
+builder.Services.AddSingleton<ITestsCreationService, TestsCreationService>();
+builder.Services.AddSingleton<ITestsExecutionService, TestsExecutionService>();
 
 var app = builder.Build();
 

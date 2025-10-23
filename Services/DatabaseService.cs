@@ -1,7 +1,7 @@
 using System.Text;
 using Dapper;
+using DTOs;
 using InterSystems.Data.IRISClient;
-using Models;
 
 namespace Services
 {

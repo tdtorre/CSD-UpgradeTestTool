@@ -93,3 +93,4 @@ C:\Project\CSD-UpgradeTestTool\obj\Debug\net9.0\CSD-UpgradeTestTool.pdb
 C:\Project\CSD-UpgradeTestTool\obj\Debug\net9.0\CSD-UpgradeTestTool.genruntimeconfig.cache
 C:\Project\CSD-UpgradeTestTool\obj\Debug\net9.0\ref\CSD-UpgradeTestTool.dll
 C:\Project\CSD-UpgradeTestTool\bin\Debug\net9.0\Dapper.dll
+C:\Project\CSD-UpgradeTestTool\obj\Debug\net9.0\CSD-UpgradeTestTool.sourcelink.json

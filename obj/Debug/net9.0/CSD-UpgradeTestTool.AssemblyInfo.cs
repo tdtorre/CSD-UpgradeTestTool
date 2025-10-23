@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CSD-UpgradeTestTool")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d16774c1b1c2d0f4768f76571be90917a21695f")]
 [assembly: System.Reflection.AssemblyProductAttribute("CSD-UpgradeTestTool")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CSD-UpgradeTestTool")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
