@@ -32,8 +32,7 @@ namespace Services.Protocols
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., log the error)
-                Console.WriteLine($"Error sending HL7 message: {ex.Message}");
+                throw new InvalidOperationException($"Error sending HL7 message: {ex.Message}");
             }
         }
     }

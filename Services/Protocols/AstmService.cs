@@ -31,8 +31,7 @@ namespace Services.Protocols
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., log the error)
-                Console.WriteLine($"Error sending ASTM message: {ex.Message}");
+                throw new InvalidOperationException($"Error sending ASTM message: {ex.Message}");
             }
         }
     }
