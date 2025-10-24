@@ -27,7 +27,7 @@ namespace Services.Protocols
                     throw new InvalidOperationException($"{protocolType} Server configuration is missing.");
                 }
 
-                using var client = new TcpClient();
+                var client = new TcpClient();
                 await client.ConnectAsync(IPAddress.Parse(host), port, cancellationToken);
                 return client;
             }
@@ -49,8 +49,8 @@ namespace Services.Protocols
                     throw new InvalidOperationException($"{protocolType} Server configuration is missing.");
                 }
 
-                using var client = new TcpClient();
-                await client.ConnectAsync(IPAddress.Parse(host), int.Parse(port), cancellationToken);
+                var client = new TcpClient();
+                await client.ConnectAsync(IPAddress.Parse(host), int.Parse(port));
                 return client;
             }
             catch (Exception ex)

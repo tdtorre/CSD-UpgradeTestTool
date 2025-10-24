@@ -19,7 +19,7 @@ public class Hl7Controller : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(req.message)) return BadRequest("Message is required");
 
-        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Hl7, _configuration);
         var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
         await protocolService.SendMessageAsync(protocolClient, req.message, ct);
 
@@ -32,7 +32,7 @@ public class Hl7Controller : ControllerBase
         if (string.IsNullOrWhiteSpace(req.host) || req.port <= 0) return BadRequest("Host and port are required");
         if (string.IsNullOrWhiteSpace(req.message)) return BadRequest("Message is required");
         
-        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Hl7, _configuration);
         var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
         await protocolService.SendMessageAsync(protocolClient, req.message, ct);
         
