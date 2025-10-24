@@ -8,6 +8,8 @@ namespace Services.Protocols
         private const byte EB = 0x1C; // FS
         private const byte CR = 0x0D; // CR
 
+        private NetworkStream _stream = null;
+
         public Hl7Service(IConfiguration configuration): base(configuration)
         {
         }
@@ -21,7 +23,7 @@ namespace Services.Protocols
         {
             try
             {
-                using var stream = client.GetStream();
+                var stream = _stream ?? client.GetStream();
                 var payload = new System.Text.UTF8Encoding().GetBytes(message);
                 var framed = new byte[1 + payload.Length + 2];
                 framed[0] = SB;

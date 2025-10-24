@@ -18,7 +18,7 @@ namespace Services.Tests
         {
             var testCases = new List<TestCase>();
             var clients = new Dictionary<Protocols.ProtocolType, TcpClient>();
-            instruments.ForEach(i =>
+            foreach (var i in instruments)
             {
                 var protocolType = i.GetProtocolType();
                 var protocolService = ProtocolServiceFactory.GetProtocolService(protocolType, _configuration);
@@ -27,12 +27,14 @@ namespace Services.Tests
                 testCases.AddRange(CreateInstrumentTestCases(i.Type, protocolType, i.TestMapping));
 
                 // Do we need to send messages here or in the execution service?
-                // testCases.ForEach(async tc => await protocolService.SendMessageAsync(protocolClient, tc.Message));
-
+                foreach (var tc in testCases)
+                {
+                    await protocolService.SendMessageAsync(protocolClient, tc.Message);
+                }
                 // What does the SendMessageAsync shall return?
                 // Where is the sample located? Where and when we must create the sample?
                 // What about the assert?
-            });
+            }
             return testCases;
         }
 
@@ -53,7 +55,7 @@ namespace Services.Tests
                     ProtocolType = protocolType
                 });
             });
-            
+
             return instrumentTestCases;
         }
     }
