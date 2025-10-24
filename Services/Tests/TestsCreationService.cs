@@ -1,5 +1,4 @@
 using System.Net.Sockets;
-using Microsoft.Identity.Client;
 using Models;
 using Services.Protocols;
 
@@ -34,6 +33,11 @@ namespace Services.Tests
                 // What does the SendMessageAsync shall return?
                 // Where is the sample located? Where and when we must create the sample?
                 // What about the assert?
+            }
+
+            foreach (var client in clients)
+            {
+                client.Value.Dispose();
             }
             return testCases;
         }
