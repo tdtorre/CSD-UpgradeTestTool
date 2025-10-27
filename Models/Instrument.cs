@@ -17,11 +17,15 @@ namespace Models
         public string Name { get; private set; }
         public InstrumentType Type { get; set; }
         public List<TestMapping> TestMapping { get; set; }
-        
-        public Instrument(string id, string name)
+        public string Host { get; set; }
+        public int Port { get; set; }
+
+        public Instrument(string id, string name, string host, int port)
         {
             this.Id = id;
             this.Name = name;
+            this.Host = host;
+            this.Port = port;
             this.TestMapping = new List<TestMapping>();
             this.Type = ParseNameToInstrumentType(name);
         }

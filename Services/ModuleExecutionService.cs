@@ -40,7 +40,8 @@ namespace Services
             if (data != null && data.Count > 0)
             {
                 var instruments = data.Select(d => new { d.Id, d.Name }).Distinct();
-                icaModule.Instruments.AddRange(instruments.Select(i => new Instrument(i.Id, i.Name)));
+                // To review Instrument host and port assignment
+                icaModule.Instruments.AddRange(instruments.Select(i => new Instrument(i.Id, i.Name, "", 0)));
                 icaModule.Instruments.ForEach(i =>
                 {
                     var testMapping = data.Where(d => d.Id == i.Id).Select(d => new TestMapping() { InstrumentTest = d.AnalyserTest, InstrumentSample = d.AnalyserSample });
@@ -55,7 +56,7 @@ namespace Services
         {
             var project = new UpgradeProject
             {
-                Afiliate = new Afiliate { Name = "Sample Afiliate", Code = "SAF" },
+                Afiliate = new Affiliate { Name = "Sample Afiliate", Code = "SAF" },
                 Name = "Sample Upgrade Project",
                 Description = "This is a sample upgrade project for demonstration purposes.",
                 SourceVersion = new Version(1, 0),

@@ -4,15 +4,15 @@ namespace Models
 {
     public class IcaModule : IIcaModule
     {
-        private string TEST_MAPPING_QUERY = "SELECT distinct i.Id, i.Name, AnalyserSample, AnalyserTest " +
-                                            "FROM SQLUser.tconTestMapping AS tm " +
-                                            "LEFT JOIN SQLUser.tInstruments AS i ON i.id = tm.AnalyserCode||'||'||tm.AnalyserNumber " +
-                                            "WHERE i.qc = 1";
+        private string TEST_MAPPING_QUERY = $"SELECT distinct rInstruments AS Id, Test, AnalyserTest,AnalyserSample, rInstruments->Name " +
+                                            "FROM tconTestMapping AS tm " +
+                                            "LEFT JOIN tTests AS t ON tm.Test=t.id " +
+                                            "WHERE rInstruments->status=1 AND tTests.status=1" + 
+                                            "ORDER BY rInstruments, AnalyserSample,Test";
         private readonly IConfiguration _config;
         public IModuleDataSource<TestMappingDto> DataSource { get; set; }
         public List<TestCase> TestCases { get; set; }
         public List<Instrument> Instruments { get; set; } = new List<Instrument>();
-        public List<string> Samples { get; set; }
 
         public IcaModule(IConfiguration config)
         {
