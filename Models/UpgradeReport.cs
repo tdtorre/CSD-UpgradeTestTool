@@ -18,13 +18,20 @@ namespace Models
         public static UpgradeReport Generate(UpgradeProject project)
         {
             var report = new UpgradeReport(project.Afiliate.Name, project.Name);
-            
-            project.UpgradeExecutions.ForEach(execution =>
+            var execution = project.UpgradeExecutions.Last();
+
+            report.Summary.Add($"ICA Module Execution on {execution.ExecutionDate}:");
+            report.Summary.Add($"Number of instruments: {execution.IcaModule.Instruments.Count}");
+            report.Summary.Add($"Number of test cases executed: {execution.IcaModule.TestCases.Count}");
+            report.Summary.Add($"Number of test cases passed: {execution.IcaModule.TestCases.Where(tc => tc.Assert.IsSuccessful).Count()}");
+            report.Summary.Add($"Time duration of tests execution: {execution.IcaModule.TestCases.Last().EndingAt - execution.IcaModule.TestCases.First().StartingAt}");
+            report.Summary.Add($"==============================");
+            report.Summary.Add($"Test Cases:");
+
+            execution.IcaModule.TestCases.ForEach(tc =>
             {
-                report.Summary.Add($"ICA Module Execution on {execution.ExecutionDate}:");
-                report.Summary.Add($"Number of instruments: {execution.IcaModule.Instruments.Count}");
-                report.Summary.Add($"Number of test cases executed: {execution.IcaModule.TestCases.Count}");
-                report.Summary.Add($"Number of test cases passed: {execution.IcaModule.TestCases.Where(tc => tc.Assert.IsSuccessful).Count()}");
+                var status = tc.Assert.IsSuccessful ? "PASSED" : "FAILED";
+                report.Summary.Add($"{tc.Name}: {status} (Duration: {tc.GetDuration()})");
             });
 
             return report;

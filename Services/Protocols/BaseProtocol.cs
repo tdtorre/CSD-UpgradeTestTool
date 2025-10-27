@@ -13,6 +13,8 @@ namespace Services.Protocols
     {
         private readonly IConfiguration _configuration;
 
+        protected NetworkStream _stream = null!;
+
         public BaseProtocol(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -27,7 +29,7 @@ namespace Services.Protocols
                     throw new InvalidOperationException($"{protocolType} Server configuration is missing.");
                 }
 
-                using var client = new TcpClient();
+                var client = new TcpClient();
                 await client.ConnectAsync(IPAddress.Parse(host), port, cancellationToken);
                 return client;
             }
@@ -49,7 +51,7 @@ namespace Services.Protocols
                     throw new InvalidOperationException($"{protocolType} Server configuration is missing.");
                 }
 
-                using var client = new TcpClient();
+                var client = new TcpClient();
                 await client.ConnectAsync(IPAddress.Parse(host), int.Parse(port), cancellationToken);
                 return client;
             }

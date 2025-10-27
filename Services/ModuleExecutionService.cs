@@ -44,7 +44,7 @@ namespace Services
                 icaModule.Instruments.AddRange(instruments.Select(i => new Instrument(i.Id, i.Name, "", 0)));
                 icaModule.Instruments.ForEach(i =>
                 {
-                    var testMapping = data.Where(d => d.Id == i.Id).Select(d => new TestMapping() { InstrumentTest = d.AnalyserTest, InstrumentSample = d.AnalyserSample });
+                    var testMapping = data.Where(d => d.Id == i.Id).Select(d => new TestMapping() { InstrumentTest = d.AnalyserTest, InstrumentSample = d.AnalyserSample, ExternalCode = d.ExternalCode });
                     i.TestMapping.AddRange(testMapping);
                 });
             }

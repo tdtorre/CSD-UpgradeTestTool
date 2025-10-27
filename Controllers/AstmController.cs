@@ -21,7 +21,7 @@ public class AstmController : ControllerBase
 
         var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
         var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
-        await protocolService.SendMessageAsync(protocolClient, req.Message, ct);
+        await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
         return Ok(new { status = "sent" });
     }
@@ -34,11 +34,11 @@ public class AstmController : ControllerBase
 
         var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
         var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
-        await protocolService.SendMessageAsync(protocolClient, req.Message, ct);
+        await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
         return Ok(new { status = "sent" });
     }
 }
 
-public record AstmRequest(string Message);
-public record AstmExtendedRequest(string host, int port, string Message);
+public record AstmRequest(string Message, bool checkAck = false);
+public record AstmExtendedRequest(string host, int port, string Message, bool checkAck = false);

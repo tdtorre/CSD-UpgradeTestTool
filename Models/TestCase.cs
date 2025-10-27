@@ -13,10 +13,15 @@ namespace Models
         public Guid Id { get; private set; } = Guid.NewGuid();
         public string Name { get; }
         public string Description { get; set; }
-        public TimeSpan StartingAt { get; set; }
-        public TimeSpan EndingAt { get; set; }
+        public DateTime StartingAt { get; set; }
+        public DateTime EndingAt { get; set; }
         public string Message { get; set; }
         public Assert Assert { get; set; }
         public ProtocolType ProtocolType { get; internal set; }
+
+        public TimeSpan GetDuration()
+        {
+            return EndingAt - StartingAt;
+        }
     }
 }

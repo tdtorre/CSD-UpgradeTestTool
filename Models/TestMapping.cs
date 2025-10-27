@@ -4,5 +4,6 @@ namespace Models
     {
         public string InstrumentTest { get; set; }
         public string InstrumentSample { get; set; }
+        public string ExternalCode { get; set; }
     }
 }

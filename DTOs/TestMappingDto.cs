@@ -7,5 +7,6 @@ namespace DTOs
         public required string Test { get; set; }
         public required string AnalyserSample { get; set; }
         public required string AnalyserTest { get; set; }
+        public required string ExternalCode { get; set; }
     }
 }
