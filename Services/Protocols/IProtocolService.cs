@@ -5,6 +5,6 @@ namespace Services.Protocols
     public interface IProtocolService
     {
         ProtocolType GetProtocolType();
-        Task SendMessageAsync(TcpClient client, string astmMessage, CancellationToken cancellationToken = default);
+        Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default);
     }
 }

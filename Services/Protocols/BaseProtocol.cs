@@ -63,7 +63,8 @@ namespace Services.Protocols
 
         public TcpClient GetProtocolClient(IProtocolService protocolService)
         {
-            return GetProtocolClient(protocolService, new Dictionary<ProtocolType, TcpClient>());
+            var protocolType = protocolService.GetProtocolType();
+            return ((BaseProtocol)protocolService).CreateClient(protocolType).Result;
         }
 
         public TcpClient GetProtocolClient(string host, int port, IProtocolService protocolService)
@@ -75,25 +76,6 @@ namespace Services.Protocols
                 throw new InvalidOperationException($"Could not create client for protocol {protocolType}");
             }
             return client;
-        }
-
-        public TcpClient GetProtocolClient(IProtocolService protocolService, Dictionary<ProtocolType, TcpClient> clients)
-        {
-            var protocolType = protocolService.GetProtocolType();
-            if (clients.ContainsKey(protocolType) == false)
-            {
-                var client = ((BaseProtocol)protocolService).CreateClient(protocolType).Result;
-                if (client != null)
-                {
-                    clients.Add(protocolType, client);
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Could not create client for protocol {protocolType}");
-                }
-            }
-                
-            return clients[protocolType];
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Net.Sockets;
+using System.Text;
 
 namespace Services.Protocols
 {
@@ -17,18 +18,43 @@ namespace Services.Protocols
             return ProtocolType.Hl7;
         }
 
-        public async Task SendMessageAsync(TcpClient client, string message, CancellationToken cancellationToken = default)
+        public async Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default)
         {
             try
             {
-                using var stream = client.GetStream();
-                var payload = new System.Text.UTF8Encoding().GetBytes(message);
-                var framed = new byte[1 + payload.Length + 2];
-                framed[0] = SB;
-                Buffer.BlockCopy(payload, 0, framed, 1, payload.Length);
-                framed[1 + payload.Length] = EB;
-                framed[1 + payload.Length + 1] = CR;
-                await stream.WriteAsync(framed, 0, framed.Length, cancellationToken);
+                var stream = _stream ?? client.GetStream();
+                var messageBytes = Encoding.UTF8.GetBytes(message);
+                using (var ms = new MemoryStream())
+                {
+                    ms.WriteByte(SB);
+                    ms.Write(messageBytes, 0, messageBytes.Length);
+                    ms.WriteByte(EB);
+                    ms.WriteByte(CR);
+                    var toSend = ms.ToArray();
+                    stream.Write(toSend, 0, toSend.Length);
+                }
+
+                if (checkAck)
+                {
+                    var buffer = new byte[1024];
+                    var ackMessage = new StringBuilder();
+
+                    int bytesRead;
+                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        string chunk = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        ackMessage.Append(chunk);
+
+                        if (chunk.Contains(((char)EB).ToString() + ((char)CR).ToString()))
+                            break;
+                    }
+
+                    string rawAck = ackMessage.ToString()
+                        .Trim((char)SB, (char)EB, (char)CR);
+                }
+
+                client.Dispose();
+                stream.Dispose();
             }
             catch (Exception ex)
             {

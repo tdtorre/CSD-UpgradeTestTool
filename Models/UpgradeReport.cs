@@ -30,8 +30,9 @@ namespace Models
 
             execution.IcaModule.TestCases.ForEach(tc =>
             {
-                var status = tc.Assert.IsSuccessful ? "PASSED" : "FAILED";
-                report.Summary.Add($"{tc.Name}: {status} (Duration: {tc.GetDuration()})");
+                var status = tc.Assert.IsSuccessful ? "PASSED" : (String.IsNullOrEmpty(tc.Error) ? "FAILED" : "ERROR");
+                var ifError = (status == "ERROR") ? " - Error: " + tc.Error : "";
+                report.Summary.Add($"{tc.Name}: {status} (Duration: {tc.GetDuration()}){ifError}");
             });
 
             return report;

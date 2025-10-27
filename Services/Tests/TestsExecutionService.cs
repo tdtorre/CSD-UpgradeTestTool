@@ -15,16 +15,27 @@ namespace Services.Tests
 
         public async Task<List<TestCase>> IcaTestsExecution(List<TestCase> testCases)
         {
-            var clients = new Dictionary<Protocols.ProtocolType, TcpClient>();
             testCases.ForEach(async tc =>
             {
-                var protocolService = ProtocolServiceFactory.GetProtocolService(tc.ProtocolType, _configuration);
-                var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService, clients);
-
-                // What shall we do with the response?
-                // await protocolService.SendMessageAsync(protocolClient, tc.Message);
+                try
+                    {
+                    tc.StartingAt = DateTime.UtcNow;
+                    var protocolService = ProtocolServiceFactory.GetProtocolService(tc.ProtocolType, _configuration);
+                    
+                    // TODO. As we are not ready to send messages to an ASTM host, we are forcing to use HL7 for all messages
+                    var protocolClient = ((BaseProtocol)protocolService).CreateClient(tc.ProtocolType).Result;
+                    if (protocolClient != null)
+                    {
+                        await protocolService.SendMessageAsync(protocolClient, tc.Message);
+                        tc.EndingAt = DateTime.UtcNow;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    tc.Error = ex.Message;
+                }
             });
-
+            
             return testCases;
         }
     }

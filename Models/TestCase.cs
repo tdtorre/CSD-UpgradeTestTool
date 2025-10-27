@@ -17,6 +17,7 @@ namespace Models
         public DateTime EndingAt { get; set; }
         public string Message { get; set; }
         public Assert Assert { get; set; }
+        public string Error { get; set; }
         public ProtocolType ProtocolType { get; internal set; }
 
         public TimeSpan GetDuration()
