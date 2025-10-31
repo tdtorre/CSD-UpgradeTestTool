@@ -12,10 +12,10 @@ namespace Services.Tests
         {
             _configuration = configuration;
         }
-
+   
         public async Task<List<TestCase>> IcaTestsExecution(List<TestCase> testCases)
         {
-            testCases.ForEach(async tc =>
+           foreach (var tc in testCases)
             {
                 try
                     {
@@ -34,7 +34,7 @@ namespace Services.Tests
                 {
                     tc.Error = ex.Message;
                 }
-            });
+            }
             
             return testCases;
         }
