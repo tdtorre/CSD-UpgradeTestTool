@@ -20,6 +20,8 @@ namespace Models
         public string Error { get; set; }
         public ProtocolType ProtocolType { get; internal set; }
 
+        public InstrumentType InstrumentName { get; set; }
+
         public TimeSpan GetDuration()
         {
             return EndingAt - StartingAt;

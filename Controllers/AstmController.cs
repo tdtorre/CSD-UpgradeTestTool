@@ -19,8 +19,8 @@ public class AstmController : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
 
-        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
-        var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
+        using var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+        using var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
         await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
         return Ok(new { status = "sent" });
@@ -32,8 +32,8 @@ public class AstmController : ControllerBase
         if (string.IsNullOrWhiteSpace(req.host) || req.port <= 0) return BadRequest("Host and port are required");
         if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
 
-        var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
-        var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
+        using var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+        using var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
         await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
         return Ok(new { status = "sent" });

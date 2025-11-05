@@ -77,5 +77,10 @@ namespace Services.Protocols
             }
             return client;
         }
+
+        public void Dispose()
+        {
+            _stream?.Dispose();
+        }
     }
 }
