@@ -2,7 +2,7 @@ using System.Net.Sockets;
 
 namespace Services.Protocols
 {
-    public interface IProtocolService
+    public interface IProtocolService : IDisposable
     {
         ProtocolType GetProtocolType();
         Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default);

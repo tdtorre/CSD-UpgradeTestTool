@@ -26,13 +26,13 @@ namespace Services.Protocols
         {
             try
             {
-                var stream = _stream ?? client.GetStream();
+                _stream ??= client.GetStream();
                 //Covers the edgecase when message has \r\n. If not message will be send as one chunk
                 var messageShards = message.Split("\r\n");
 
-                await stream.WriteAsync(new[] { ENQ });
+                await _stream.WriteAsync(new[] { ENQ });
 
-                var ack = stream.ReadByte();
+                var ack = _stream.ReadByte();
 
                 if (ack != ACK)
                 {
@@ -45,9 +45,9 @@ namespace Services.Protocols
 
                     var messageBytes = Encoding.ASCII.GetBytes(framedMessage);
 
-                    await stream.WriteAsync(messageBytes, 0, messageBytes.Length);
+                    await _stream.WriteAsync(messageBytes, 0, messageBytes.Length);
 
-                    var frameAck = stream.ReadByte();
+                    var frameAck = _stream.ReadByte();
 
                     if (frameAck != ACK)
                     {
@@ -55,10 +55,7 @@ namespace Services.Protocols
                     }
                 }
 
-                await stream.WriteAsync(new[] { EOT });
-
-                client.Dispose();
-                stream.Dispose();
+                await _stream.WriteAsync(new[] { EOT });
             }
             catch (Exception ex)
             {

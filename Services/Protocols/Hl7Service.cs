@@ -22,7 +22,7 @@ namespace Services.Protocols
         {
             try
             {
-                var stream = _stream ?? client.GetStream();
+                _stream ??= client.GetStream();
                 var messageBytes = Encoding.UTF8.GetBytes(message);
                 using (var ms = new MemoryStream())
                 {
@@ -31,7 +31,7 @@ namespace Services.Protocols
                     ms.WriteByte(EB);
                     ms.WriteByte(CR);
                     var toSend = ms.ToArray();
-                    stream.Write(toSend, 0, toSend.Length);
+                    _stream.Write(toSend, 0, toSend.Length);
                 }
 
                 if (checkAck)
@@ -40,7 +40,7 @@ namespace Services.Protocols
                     var ackMessage = new StringBuilder();
 
                     int bytesRead;
-                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    while ((bytesRead = _stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         string chunk = Encoding.ASCII.GetString(buffer, 0, bytesRead);
                         ackMessage.Append(chunk);
@@ -52,9 +52,6 @@ namespace Services.Protocols
                     string rawAck = ackMessage.ToString()
                         .Trim((char)SB, (char)EB, (char)CR);
                 }
-
-                client.Dispose();
-                stream.Dispose();
             }
             catch (Exception ex)
             {

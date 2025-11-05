@@ -1,6 +1,4 @@
-using System.Net.Sockets;
 using Models;
-using Services.Protocols;
 
 namespace Services.Tests
 {
@@ -15,27 +13,26 @@ namespace Services.Tests
    
         public async Task<List<TestCase>> IcaTestsExecution(List<TestCase> testCases)
         {
-           foreach (var tc in testCases)
-            {
-                try
+            using (var protocolClient = new TCPConnectionsUnitOfWork(_configuration))
+            {                
+                foreach (var tc in testCases)
+                {
+                    try
                     {
-                    tc.StartingAt = DateTime.UtcNow;
-                    var protocolService = ProtocolServiceFactory.GetProtocolService(tc.ProtocolType, _configuration);
-                    
-                    // TODO. As we are not ready to send messages to an ASTM host, we are forcing to use HL7 for all messages
-                    var protocolClient = ((BaseProtocol)protocolService).CreateClient(tc.ProtocolType).Result;
-                    if (protocolClient != null)
+                        var (client, service) = protocolClient.GetOrCreateClient(tc.InstrumentName, tc.ProtocolType);
+                        tc.StartingAt = DateTime.UtcNow;
+                        if (protocolClient != null)
+                        {
+                            await service.SendMessageAsync(client, tc.Message);
+                            tc.EndingAt = DateTime.UtcNow;
+                        }
+                    }
+                    catch (Exception ex)
                     {
-                        await protocolService.SendMessageAsync(protocolClient, tc.Message);
-                        tc.EndingAt = DateTime.UtcNow;
+                        tc.Error = ex.Message;
                     }
                 }
-                catch (Exception ex)
-                {
-                    tc.Error = ex.Message;
-                }
             }
-            
             return testCases;
         }
     }
