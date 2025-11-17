@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using Models;
 using Serilog;
 using Services;
 using Services.Protocols;
@@ -21,8 +22,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "CSD Upgrade Test Tool API", Version = "v1" });
 });
 
+builder.Services.Configure<ReportsDatabaseSettings>(
+    builder.Configuration.GetSection("ReportingDatabase"));
+
 // DI registrations
 builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+builder.Services.AddSingleton<IReportsRepository, ReportsRepository>();
 builder.Services.AddSingleton<IProtocolService, Hl7Service>();
 builder.Services.AddSingleton<IProtocolService, AstmService>();
 builder.Services.AddSingleton<IModuleExecutionService, ModuleExecutionService>();

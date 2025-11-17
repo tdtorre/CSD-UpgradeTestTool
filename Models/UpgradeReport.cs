@@ -1,7 +1,13 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Models
 {
     public class UpgradeReport
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         public string Afiliate { get; set; }
         public string ProjectName { get; set; }
         public DateTime GeneratedOn { get; set; }
