@@ -22,7 +22,7 @@ namespace Models
             using var irisConnection = new IRISConnection(connectionString);
             try
             {
-                irisConnection.Open();
+                await irisConnection.OpenAsync();
                 var result = await irisConnection.QueryAsync<T>(query);
 
                 if (result != null)

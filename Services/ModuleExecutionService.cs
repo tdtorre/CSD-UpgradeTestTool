@@ -9,11 +9,18 @@ namespace Services
         private readonly ITestsCreationService _testsCreationService;
         private readonly ITestsExecutionService _testsExecutionService;
 
-        public ModuleExecutionService(IConfiguration configuration, ITestsCreationService testsCreationService, ITestsExecutionService testsExecutionService)
+        private readonly IReportsRepository _reportsRepository;
+
+        public ModuleExecutionService(IConfiguration configuration,
+            ITestsCreationService testsCreationService, 
+            ITestsExecutionService testsExecutionService, 
+            IReportsRepository reportsRepository
+            )
         {
             _configuration = configuration;
             _testsCreationService = testsCreationService;
             _testsExecutionService = testsExecutionService;
+            _reportsRepository = reportsRepository;
         }
 
         public UpgradeProject InitializeProject()
@@ -30,6 +37,7 @@ namespace Services
             var lastExecution = project.UpgradeExecutions.Last();
             lastExecution.IcaModule = icaModule;
             lastExecution.Report = UpgradeReport.Generate(project);
+            await _reportsRepository.InsertReport(lastExecution.Report);
             return lastExecution.Report;
         }
 
