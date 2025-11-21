@@ -21,9 +21,9 @@ public class AstmController : ControllerBase
 
         using var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
         using var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
-        await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
+        var response = await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
-        return Ok(new { status = "sent" });
+        return Ok(new { message = response });
     }
 
     [HttpPost("sendMessageToHost")]
@@ -34,9 +34,9 @@ public class AstmController : ControllerBase
 
         using var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
         using var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
-        await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
+        var response = await protocolService.SendMessageAsync(protocolClient, req.Message, req.checkAck, ct);
 
-        return Ok(new { status = "sent" });
+        return Ok(new { message = response });
     }
 }
 
