@@ -18,7 +18,7 @@ namespace Services.Protocols
             return ProtocolType.Hl7;
         }
 
-        public async Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default)
+        public async Task<string> SendMessageAsync(TcpClient client, string message, bool waitResponse = false, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Services.Protocols
                     _stream.Write(toSend, 0, toSend.Length);
                 }
 
-                if (checkAck)
+                if (waitResponse)
                 {
                     var buffer = new byte[1024];
                     var ackMessage = new StringBuilder();
@@ -51,7 +51,11 @@ namespace Services.Protocols
 
                     string rawAck = ackMessage.ToString()
                         .Trim((char)SB, (char)EB, (char)CR);
+
+                    return rawAck;
                 }
+
+                return "ACK";
             }
             catch (Exception ex)
             {

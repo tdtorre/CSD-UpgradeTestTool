@@ -22,7 +22,7 @@ namespace Services.Protocols
             return ProtocolType.Astm;
         }
 
-        public async Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default)
+        public async Task<string> SendMessageAsync(TcpClient client, string message, bool waitResponse = false, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -56,11 +56,52 @@ namespace Services.Protocols
                 }
 
                 await _stream.WriteAsync(new[] { EOT });
+
+                if (waitResponse)
+                {
+                    return await ReadResponse(cancellationToken);
+                }
+
+                return "ACK";
+
+
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Error sending ASTM message: {ex.Message}");
             }
+        }
+
+        public async Task<string> ReadResponse(CancellationToken cancellationToken)
+        {
+            var buffer = new byte[1024];
+            var responseBuilder = new StringBuilder();
+
+            int bytesRead;
+            while ((bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                string chunk = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                if (chunk.ToString() == ((char)ENQ).ToString())
+                {
+                    await _stream.WriteAsync(new[] { ACK });
+                    continue;
+                }
+
+                if (chunk.ToString() == ((char)EOT).ToString())
+                {
+                    break;
+                }
+
+                string rawAck = chunk.ToString().Trim(STX, CR, LF);
+                string trimmedChunk = rawAck.Substring(1, rawAck.Length - 4);
+                responseBuilder.Append(trimmedChunk);
+
+                await _stream.WriteAsync(new[] { ACK });
+            }
+
+            return responseBuilder.ToString();
+
         }
 
         private string CalculateHexSumOfPlainMessage(string message, int index)

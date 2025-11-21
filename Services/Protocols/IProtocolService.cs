@@ -5,6 +5,6 @@ namespace Services.Protocols
     public interface IProtocolService : IDisposable
     {
         ProtocolType GetProtocolType();
-        Task SendMessageAsync(TcpClient client, string message, bool checkAck = false, CancellationToken cancellationToken = default);
+        Task<string> SendMessageAsync(TcpClient client, string message, bool waitResponse = false, CancellationToken cancellationToken = default);
     }
 }
