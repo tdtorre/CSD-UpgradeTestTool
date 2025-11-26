@@ -9,6 +9,7 @@ namespace Models
         CobasT511,
         Cobas6500,
         CobasE411,
+        Host,
     }
 
     public class Instrument

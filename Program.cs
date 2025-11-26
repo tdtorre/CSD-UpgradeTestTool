@@ -28,6 +28,7 @@ builder.Services.AddSingleton<IProtocolService, AstmService>();
 builder.Services.AddSingleton<IModuleExecutionService, ModuleExecutionService>();
 builder.Services.AddSingleton<ITestsCreationService, TestsCreationService>();
 builder.Services.AddSingleton<ITestsExecutionService, TestsExecutionService>();
+builder.Services.AddSingleton<ITestValidationService, TestValidationService>();
 
 var app = builder.Build();
 

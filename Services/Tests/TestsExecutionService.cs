@@ -19,7 +19,7 @@ namespace Services.Tests
                 {
                     try
                     {
-                        var (client, service) = protocolClient.GetOrCreateClient(tc.InstrumentName, tc.ProtocolType);
+                        var (client, service) = protocolClient.GetOrCreateClient(InstrumentType.Host, Protocols.ProtocolType.Astm);
                         tc.StartingAt = DateTime.UtcNow;
                         if (protocolClient != null)
                         {
