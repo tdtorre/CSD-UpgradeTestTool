@@ -1,0 +1,42 @@
+using CSD.UpgradeTestTool.Core.Services.Protocols;
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AstmController : ControllerBase
+{
+    // private readonly IConfiguration _configuration;
+
+    // public AstmController(IConfiguration configuration)
+    // {
+    //     _configuration = configuration;
+    // }
+
+    // [HttpPost("sendMessage")]
+    // public async Task<IActionResult> SendMessage([FromBody] AstmRequest req, CancellationToken ct)
+    // {
+    //     if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
+
+    //     var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+    //     var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(protocolService);
+    //     await protocolService.SendQueryMessageAsync(protocolClient, req.Message, req.checkAck, ct);
+
+    //     return Ok(new { status = "sent" });
+    // }
+
+    // [HttpPost("sendMessageToHost")]
+    // public async Task<IActionResult> SendMessageToHost([FromBody] AstmExtendedRequest req, CancellationToken ct)
+    // {
+    //     if (string.IsNullOrWhiteSpace(req.host) || req.port <= 0) return BadRequest("Host and port are required");
+    //     if (string.IsNullOrWhiteSpace(req.Message)) return BadRequest("Message is required");
+
+    //     var protocolService = ProtocolServiceFactory.GetProtocolService(ProtocolType.Astm, _configuration);
+    //     var protocolClient = ((BaseProtocol)protocolService).GetProtocolClient(req.host, req.port, protocolService);
+    //     await protocolService.SendQueryMessageAsync(protocolClient, req.Message, req.checkAck, ct);
+
+    //     return Ok(new { status = "sent" });
+    // }
+}
+
+public record AstmRequest(string Message, bool checkAck = false);
+public record AstmExtendedRequest(string host, int port, string Message, bool checkAck = false);

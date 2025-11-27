@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CSD.UpgradeTestTool.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    <ProjectReference Include="..\CSD-UpgradeTestTool.Core\CSD-UpgradeTestTool.Core.csproj" />
+    <ProjectReference Include="..\CSD-UpgradeTestTool.Infrastructure\CSD-UpgradeTestTool.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Link the solution-level shared appsettings so it is copied to the API output folder -->
+    <None Include="..\appsettings.shared.json">
+      <Link>appsettings.shared.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

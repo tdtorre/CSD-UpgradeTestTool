@@ -1,0 +1,6 @@
+@CSD.UpgradeTestTool.Api_HostAddress = http://localhost:5224
+
+GET {{CSD.UpgradeTestTool.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

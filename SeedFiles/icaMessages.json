@@ -1,0 +1,18 @@
+[
+  {
+    "InstrumentId": "cobaspro",
+    "Protocol": "HL7",
+    "QueryMessage": "MSH|^~\\&|ctws^||host||20251023081551||OML^O21|{0}||2.5|||NE|NE||8859/1\r{1}\rPV1|||\rORC|NW|{2}|||||^^^^^R||{3}||||^^^|||||||||||||||||||\rOBR|1|{2}||{4}|||{3}||||A",
+    "QueryReplyMessage": "RPL-19f2da33",
+    "PatientResultMessage": "RES-b4c94a6d"
+  },
+  {
+    "InstrumentId": "cobas6500",
+    "Protocol": "ASTM",
+    "QueryMessage": "QRY-e82e1b21",
+    "QueryReplyMessage": "RPL-04b82eaa",
+    "PatientResultMessage": "RES-1bcd9ff3"
+  }
+]
+
+
