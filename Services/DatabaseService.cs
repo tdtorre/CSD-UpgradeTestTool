@@ -63,6 +63,25 @@ namespace Services
             }
         }
 
+        public async Task<T?> ExecuteSingleOrDefaultAsync<T>(string query)
+        {
+            var connectionString = _config.GetConnectionString("IrisDb");
+            if (string.IsNullOrEmpty(connectionString))
+                throw new InvalidOperationException("DB connection string 'IrisDb' is not configured.");
+            using var irisConnection = new IRISConnection(connectionString);
+            try
+            {
+                irisConnection.Open();
+                var response = await irisConnection.QuerySingleOrDefaultAsync<T>(query);
+
+                return response;
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public async Task<List<TestMappingDto>> GetTestMappings()
         {
             var connectionString = _config.GetConnectionString("IrisDb");
