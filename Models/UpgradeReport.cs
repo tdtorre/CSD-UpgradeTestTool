@@ -21,6 +21,7 @@ namespace Models
             var execution = project.UpgradeExecutions.Last();
 
             report.Summary.Add($"ICA Module Execution on {execution.ExecutionDate}:");
+            report.Summary.Add($"Number of orders that dont exist {execution.IcaModule.TestCases.Where(tc => tc.Assert.Type == AssertType.NotExistInDb).Count()}:");
             report.Summary.Add($"Number of instruments: {execution.IcaModule.Instruments.Count}");
             report.Summary.Add($"Number of test cases executed: {execution.IcaModule.TestCases.Count}");
             report.Summary.Add($"Number of test cases passed: {execution.IcaModule.TestCases.Where(tc => tc.Assert.IsSuccessful).Count()}");
@@ -31,7 +32,7 @@ namespace Models
             execution.IcaModule.TestCases.ForEach(tc =>
             {
                 var status = tc.Assert.IsSuccessful ? "PASSED" : (String.IsNullOrEmpty(tc.Error) ? "FAILED" : "ERROR");
-                var ifError = (status == "ERROR") ? " - Error: " + tc.Error : "";
+                var ifError = (status == "ERROR") ? " - Error: " + tc.Error : tc.Assert.Type == AssertType.NotExistInDb ? " Order has not been created in database" : "";
                 report.Summary.Add($"{tc.Name}: {status} (Duration: {tc.GetDuration()}){ifError}");
             });
 

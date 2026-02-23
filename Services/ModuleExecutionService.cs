@@ -8,12 +8,17 @@ namespace Services
         private readonly IConfiguration _configuration;
         private readonly ITestsCreationService _testsCreationService;
         private readonly ITestsExecutionService _testsExecutionService;
+        private readonly ITestValidationService _testValidationService;
 
-        public ModuleExecutionService(IConfiguration configuration, ITestsCreationService testsCreationService, ITestsExecutionService testsExecutionService)
+        public ModuleExecutionService(IConfiguration configuration, 
+            ITestsCreationService testsCreationService, 
+            ITestsExecutionService testsExecutionService,
+            ITestValidationService testValidationService)
         {
             _configuration = configuration;
             _testsCreationService = testsCreationService;
             _testsExecutionService = testsExecutionService;
+            _testValidationService = testValidationService;
         }
 
         public UpgradeProject InitializeProject()
@@ -26,6 +31,7 @@ namespace Services
             var icaModule = await LoadIcaModule();
             icaModule.TestCases = await _testsCreationService.IcaTestsCreation(icaModule.Instruments);
             icaModule.TestCases = await _testsExecutionService.IcaTestsExecution(icaModule.TestCases);
+            icaModule.TestCases = await _testValidationService.ValidateOrdersInDb(icaModule.TestCases);
             
             var lastExecution = project.UpgradeExecutions.Last();
             lastExecution.IcaModule = icaModule;
